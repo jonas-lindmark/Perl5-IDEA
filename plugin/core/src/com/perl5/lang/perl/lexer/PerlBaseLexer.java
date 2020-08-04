@@ -151,6 +151,14 @@ public abstract class PerlBaseLexer extends PerlProtoLexer implements PerlElemen
     return SUB_NAME;
   }
 
+  public @NotNull Set<String> getSubNames() {
+    return mySubNamesProvider.getValue();
+  }
+
+  public boolean isKnownNamespace(String canonicalName) {
+    return myNamespaceNamesProvider.getValue().contains(canonicalName) || myLocalPackages.contains(canonicalName);
+  }
+
   @Override
   public boolean isInitialState() {
     return super.isInitialState() &&
@@ -468,8 +476,7 @@ public abstract class PerlBaseLexer extends PerlProtoLexer implements PerlElemen
     else if (myProject != null) {
       String canonicalName = PerlPackageUtil.getCanonicalName(tokenText);
       if (!StringUtil.containsChar(canonicalName, ':')) {
-        if (StringUtil.isCapitalized(canonicalName) &&
-            (myNamespaceNamesProvider.getValue().contains(canonicalName) || myLocalPackages.contains(canonicalName))) {
+        if (StringUtil.isCapitalized(canonicalName) && isKnownNamespace(canonicalName)) {
           tokenType = PACKAGE;
         }
         else {
@@ -482,10 +489,10 @@ public abstract class PerlBaseLexer extends PerlProtoLexer implements PerlElemen
       else if (myImplicitSubsService.getSub(canonicalName) != null) {
         tokenType = QUALIFYING_PACKAGE;
       }
-      else if (mySubNamesProvider.getValue().contains(canonicalName)) {
+      else if (getSubNames().contains(canonicalName)) {
         tokenType = QUALIFYING_PACKAGE;
       }
-      else if (myNamespaceNamesProvider.getValue().contains(canonicalName) || myLocalPackages.contains(canonicalName)) {
+      else if (isKnownNamespace(canonicalName)) {
         tokenType = PACKAGE;
       }
       else {

@@ -115,10 +115,13 @@ public class PerlPackageUtil implements PerlElementTypes, PerlCorePackages {
   public static final String MAIN_NAMESPACE_SHORT = NAMESPACE_SEPARATOR;
 
   public static final String UNIVERSAL_NAMESPACE = "UNIVERSAL";
+  public static final String UNIVERSAL_NAMESPACE_FULL = UNIVERSAL_NAMESPACE + NAMESPACE_SEPARATOR;
 
   public static final String CORE_NAMESPACE = "CORE";
   public static final String CORE_NAMESPACE_FULL = CORE_NAMESPACE + NAMESPACE_SEPARATOR;
   public static final String CORE_GLOBAL_NAMESPACE = CORE_NAMESPACE_FULL + "GLOBAL";
+  public static final String CORE_GLOBAL_NAMESPACE_FULL = CORE_GLOBAL_NAMESPACE + NAMESPACE_SEPARATOR;
+
   public static final String DEFAULT_LIB_DIR = "lib";
   public static final String DEFAULT_TEST_DIR = "t";
 

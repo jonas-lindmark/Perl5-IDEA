@@ -70,6 +70,10 @@ public class PerlSmartLexerAdapterBase<Flex extends FlexLexer> extends LexerBase
     return myBuffer.subSequence(getTokenStart(), getTokenEnd());
   }
 
+  public @NotNull CharSequence getTokenChars(@NotNull Token token) {
+    return myBuffer.subSequence(getTokenStart(token), token.tokenEnd);
+  }
+
   @Override
   public void advance() {
     initAndClarify();
@@ -86,7 +90,7 @@ public class PerlSmartLexerAdapterBase<Flex extends FlexLexer> extends LexerBase
   @Override
   public @Nullable IElementType getTokenType() {
     initAndClarify();
-    return myCurrentToken == null ? null : myCurrentToken.tokenType;
+    return myCurrentToken == null ? null : myCurrentToken.clarifiedType;
   }
 
   @Override
@@ -104,10 +108,14 @@ public class PerlSmartLexerAdapterBase<Flex extends FlexLexer> extends LexerBase
   @Override
   public int getTokenStart() {
     initAndClarify();
-    if (myCurrentToken == null) {
+    return getTokenStart(myCurrentToken);
+  }
+
+  protected final int getTokenStart(@Nullable Token token) {
+    if (token == null) {
       return myTokensTail == null ? myBufferStart : myTokensTail.tokenEnd;
     }
-    return myCurrentToken.prevToken == null ? myBufferStart : myCurrentToken.prevToken.tokenEnd;
+    return token.prevToken == null ? myBufferStart : token.prevToken.tokenEnd;
   }
 
   @Override
@@ -188,10 +196,24 @@ public class PerlSmartLexerAdapterBase<Flex extends FlexLexer> extends LexerBase
     }
   }
 
+  protected final @NotNull CharSequence getTokensChars(@NotNull Token firstToken, @NotNull Token lastToken) {
+    return myBuffer.subSequence(getTokenStart(firstToken), lastToken.tokenEnd);
+  }
+
+  /**
+   * @return next token for the {@code token} with lazy lexing
+   */
+  protected final @Nullable Token getNextToken(@NotNull Token token) {
+    if (token.nextToken == null) {
+      requestNextToken();
+    }
+    return token.nextToken;
+  }
+
   /**
    * Merges all tokens from {@code firstToken} to {@code lastToken} into the {@code firstToken}
    */
-  private final void mergeRange(@NotNull Token firstToken, @NotNull Token lastToken) {
+  protected final void mergeRange(@NotNull Token firstToken, @NotNull Token lastToken) {
     if (myCurrentToken != firstToken) {
       Token run = firstToken.nextToken;
       while (run != null) {
