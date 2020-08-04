@@ -19,6 +19,7 @@ package com.perl5.lang.perl.lexer.adapters;
 import com.intellij.lexer.FlexLexer;
 import com.intellij.lexer.LexerBase;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -208,6 +209,28 @@ public class PerlSmartLexerAdapterBase<Flex extends FlexLexer> extends LexerBase
       requestNextToken();
     }
     return token.nextToken;
+  }
+
+  @Contract("null->false")
+  protected final boolean isSpaceOrComment(@Nullable Token token) {
+    return token != null && isSpaceOrComment(token.getTokenType());
+  }
+
+  protected boolean isSpaceOrComment(@NotNull IElementType tokenType) {
+    return tokenType == TokenType.WHITE_SPACE;
+  }
+
+  protected final @Nullable Token getNextMeaningfulToken(@NotNull Token token) {
+    Token run = token;
+    while (true) {
+      run = getNextToken(run);
+      if (run == null) {
+        return null;
+      }
+      if (!isSpaceOrComment(run)) {
+        return run;
+      }
+    }
   }
 
   /**

@@ -77,6 +77,11 @@ public class PerlSmartLexerAdapter extends PerlSmartLexerAdapterBase<PerlProtoLe
     "write", "telldir", "tell", "rewinddir", "readdir", "getc", "fileno", "eof", "closedir", "close", "chdir"
   );
 
+  private static final Set<String> CORE_LIST = Set.of(
+    "NEXT", "bigrat", "version", "Win32", "Memoize", "experimental", "bignum", "bigint", "autodie", "Socket", "DB_File", "parent", "Encode",
+    "Digest", "Fatal", "perlfaq", "CPAN", "encoding"
+  );
+
   private @Nullable Project myProject;
   private final ClearableLazyValue<Set<String>> mySubNamesProvider = ClearableLazyValue.create(
     () -> myProject == null ? Collections.emptySet() : PerlNamesCache.getInstance(myProject).getSubsNamesSet());
@@ -173,6 +178,12 @@ public class PerlSmartLexerAdapter extends PerlSmartLexerAdapterBase<PerlProtoLe
       token.setClarifiedType(IDENTIFIER);
       return;
     }
+
+    if (isFatCommaAhead(token)) {
+      token.setClarifiedType(STRING_CONTENT);
+      return;
+    }
+
     String tokenText = getTokenChars(token).toString();
 
     // this feels like a map
@@ -193,12 +204,25 @@ public class PerlSmartLexerAdapter extends PerlSmartLexerAdapterBase<PerlProtoLe
       token.setClarifiedType(BUILTIN_UNARY);
       remapNextBareToHandle(token);
     }
+    else if (CORE_LIST.contains(tokenText)) {
+      token.setClarifiedType(PACKAGE);
+    }
     else if (StringUtil.isCapitalized(tokenText) && isKnownNamespace(tokenText)) {
       token.setClarifiedType(PACKAGE);
     }
     else {
       token.setClarifiedType(SUB_NAME);
     }
+  }
+
+  private boolean isFatCommaAhead(@NotNull Token token) {
+    Token nextMeaningfulToken = getNextMeaningfulToken(token);
+    return nextMeaningfulToken != null && nextMeaningfulToken.getTokenType() == FAT_COMMA;
+  }
+
+  @Override
+  protected boolean isSpaceOrComment(@NotNull IElementType tokenType) {
+    return super.isSpaceOrComment(tokenType) || tokenType == COMMENT_LINE;
   }
 
   private void remapNextBareToHandle(@NotNull Token token) {
