@@ -64,8 +64,7 @@ public class PerlSublexingLexerAdapter extends LexerBase implements PerlElementT
     ENFORCED_SUBLEXINGS_MAP.put(HEREDOC_QX, PerlLexer.STRING_QX);
   }
 
-  private final @NotNull PerlProtoLexer myPerlLexer;
-  private final @NotNull FlexAdapter myFlexAdapter;
+  private final @NotNull PerlSmartLexerAdapter mySmartLexerAdapter;
   private final @NotNull PerlLexingContext myLexingContext;
   private boolean myIsSublexing = false;
   private PerlSublexingLexerAdapter mySubLexer;
@@ -81,8 +80,7 @@ public class PerlSublexingLexerAdapter extends LexerBase implements PerlElementT
   }
 
   public PerlSublexingLexerAdapter(@NotNull PerlProtoLexer perlLexer, @NotNull PerlLexingContext lexingContext) {
-    myPerlLexer = perlLexer;
-    myFlexAdapter = new FlexAdapter(perlLexer);
+    mySmartLexerAdapter = new PerlSmartLexerAdapter(perlLexer, lexingContext.getProject());
     myLexingContext = lexingContext;
   }
 
@@ -98,7 +96,7 @@ public class PerlSublexingLexerAdapter extends LexerBase implements PerlElementT
     start(buffer, startOffset, endOffset, subLexingState);
     PerlLexer perlLexer = getPerlLexer();
     if (perlLexer == null) {
-      LOG.error("Expected to get perl lexer, got " + myPerlLexer);
+      LOG.error("Expected to get perl lexer, got " + mySmartLexerAdapter);
       return;
     }
     perlLexer.setSingleOpenQuoteChar(openQuoteChar);
@@ -119,11 +117,11 @@ public class PerlSublexingLexerAdapter extends LexerBase implements PerlElementT
   }
 
   private @Nullable PerlLexer getPerlLexer() {
-    return myPerlLexer instanceof PerlLexer ? (PerlLexer)myPerlLexer : null;
+    return mySmartLexerAdapter.getLexer() instanceof PerlLexer ? (PerlLexer)mySmartLexerAdapter.getLexer() : null;
   }
 
-  private @NotNull FlexAdapter getFlexAdapter() {
-    return myFlexAdapter;
+  private @NotNull Lexer getFlexAdapter() {
+    return mySmartLexerAdapter;
   }
 
   private @NotNull PerlLexingContext getLexingContext() {
@@ -232,7 +230,7 @@ public class PerlSublexingLexerAdapter extends LexerBase implements PerlElementT
     if (myTokenType == QUOTE_SINGLE_OPEN) {
       CharSequence tokenSequence = lexer.getTokenSequence();
       if (tokenSequence.length() != 1) {
-        LOG.error("Got: " + tokenSequence);
+        LOG.error("Got: '" + tokenSequence + "'");
       }
       mySingleOpenQuoteChar = tokenSequence.charAt(0);
     }

@@ -17,8 +17,8 @@
 package com.perl5.lang.pod.elementTypes;
 
 import com.intellij.lang.Language;
-import com.intellij.lexer.FlexAdapter;
 import com.intellij.lexer.Lexer;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.templateLanguages.TemplateDataElementType;
@@ -26,6 +26,7 @@ import com.intellij.psi.templateLanguages.TemplateLanguageFileViewProvider;
 import com.perl5.lang.perl.PerlLanguage;
 import com.perl5.lang.perl.lexer.PerlElementTypes;
 import com.perl5.lang.perl.lexer.PerlLexer;
+import com.perl5.lang.perl.lexer.adapters.PerlSmartLexerAdapter;
 import com.perl5.lang.pod.PodLanguage;
 import com.perl5.lang.pod.lexer.PodElementTypes;
 import org.jetbrains.annotations.NonNls;
@@ -76,7 +77,8 @@ public class PodTemplatingElementType extends TemplateDataElementType implements
   @Override
   protected Lexer createBaseLexer(TemplateLanguageFileViewProvider viewProvider) {
     if (viewProvider.getBaseLanguage() == PerlLanguage.INSTANCE) {
-      return new FlexAdapter(new PerlLexer(null).withProject(viewProvider.getManager().getProject()));
+      Project project = viewProvider.getManager().getProject();
+      return new PerlSmartLexerAdapter(new PerlLexer(null).withProject(project), project);
     }
     return super.createBaseLexer(viewProvider);
   }
