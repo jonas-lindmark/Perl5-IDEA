@@ -21,12 +21,12 @@ import com.intellij.psi.tree.TokenSet;
 import com.perl5.lang.perl.PerlParserDefinition;
 import com.perl5.lang.perl.lexer.PerlElementTypes;
 import com.perl5.lang.perl.lexer.PerlLexingContext;
-import com.perl5.lang.perl.lexer.adapters.PerlMergingLexerAdapter;
+import com.perl5.lang.perl.lexer.adapters.PerlSublexingLexerAdapter;
 
 
 public class PerlWordsScanner extends DefaultWordsScanner implements PerlElementTypes {
   public PerlWordsScanner() {
-    super(new PerlMergingLexerAdapter(PerlLexingContext.create(null).withEnforcedSublexing(true)),
+    super(new PerlSublexingLexerAdapter(PerlLexingContext.create(null).withEnforcedSublexing(true)),
           PerlParserDefinition.IDENTIFIERS,
           TokenSet.orSet(PerlParserDefinition.COMMENTS, TokenSet.create(POD)),
           PerlParserDefinition.LITERALS

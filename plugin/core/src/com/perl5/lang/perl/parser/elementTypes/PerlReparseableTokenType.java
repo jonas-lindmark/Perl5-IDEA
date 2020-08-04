@@ -28,7 +28,7 @@ import com.intellij.psi.impl.source.tree.TreeUtil;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IReparseableLeafElementType;
 import com.perl5.lang.perl.lexer.PerlLexingContext;
-import com.perl5.lang.perl.lexer.adapters.PerlMergingLexerAdapter;
+import com.perl5.lang.perl.lexer.adapters.PerlSublexingLexerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -145,7 +145,7 @@ public abstract class PerlReparseableTokenType extends PerlTokenTypeEx implement
   }
 
   protected @Nullable Lexer createLexer(@NotNull ASTNode nodeToLex) {
-    return new PerlMergingLexerAdapter(PerlLexingContext.create(nodeToLex.getPsi().getProject()).withEnforcedSublexing(true));
+    return new PerlSublexingLexerAdapter(PerlLexingContext.create(nodeToLex.getPsi().getProject()).withEnforcedSublexing(true));
   }
 
   /**

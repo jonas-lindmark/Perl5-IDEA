@@ -17,6 +17,7 @@
 package unit.perl.parser;
 
 import categories.Performance;
+import com.intellij.lexer.Lexer;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.CaretModel;
@@ -25,7 +26,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorModificationUtil;
 import com.intellij.psi.PsiDocumentManager;
 import com.perl5.lang.perl.lexer.PerlLexingContext;
-import com.perl5.lang.perl.lexer.adapters.PerlMergingLexerAdapter;
+import com.perl5.lang.perl.lexer.adapters.PerlSublexingLexerAdapter;
 import com.perl5.lang.perl.psi.stubs.namespaces.PerlNamespaceIndex;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -116,7 +117,7 @@ public class PerlLexerPerformanceTest extends PerlParserTestBase {
 
   private void testLexing(String testData) {
     PerlLexingContext lexingContext = PerlLexingContext.create(getProject()).withEnforcedSublexing(true);
-    PerlMergingLexerAdapter perlLexer = new PerlMergingLexerAdapter(lexingContext);
+    Lexer perlLexer = new PerlSublexingLexerAdapter(lexingContext);
     perlLexer.start(testData, 0, testData.length(), 0);
 
     while (perlLexer.getTokenType() != null) {

@@ -19,15 +19,11 @@ package com.perl5.lang.mason2.lexer;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.tree.TokenSet;
 import com.perl5.lang.mason2.elementType.Mason2ElementTypes;
-import com.perl5.lang.perl.lexer.adapters.PerlMergingLexerAdapter;
 import com.perl5.lang.perl.lexer.adapters.PerlTemplatingMergingLexerAdapter;
 
 
 public class Mason2TemplatingLexerAdapter extends PerlTemplatingMergingLexerAdapter implements Mason2ElementTypes {
-  private static final TokenSet TOKENS_TO_MERGE = TokenSet.orSet(
-    PerlMergingLexerAdapter.TOKENS_TO_MERGE,
-    TokenSet.create(MASON_TEMPLATE_BLOCK_HTML)
-  );
+  private static final TokenSet TOKENS_TO_MERGE = TokenSet.create(MASON_TEMPLATE_BLOCK_HTML);
 
   public Mason2TemplatingLexerAdapter(Project project, boolean enforceSublexing) {
     super(project, new Mason2TemplatingLexer(null).withProject(project), TOKENS_TO_MERGE, enforceSublexing);

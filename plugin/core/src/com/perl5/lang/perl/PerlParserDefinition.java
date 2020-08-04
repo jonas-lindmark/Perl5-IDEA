@@ -32,7 +32,7 @@ import com.perl5.lang.perl.lexer.PerlElementTypes;
 import com.perl5.lang.perl.lexer.PerlLexer;
 import com.perl5.lang.perl.lexer.PerlLexingContext;
 import com.perl5.lang.perl.lexer.PerlTokenSets;
-import com.perl5.lang.perl.lexer.adapters.PerlMergingLexerAdapter;
+import com.perl5.lang.perl.lexer.adapters.PerlSublexingLexerAdapter;
 import com.perl5.lang.perl.parser.PerlParserImpl;
 import com.perl5.lang.perl.parser.elementTypes.PsiElementProvider;
 import com.perl5.lang.perl.psi.PerlLexerAwareParserDefinition;
@@ -70,7 +70,7 @@ public class PerlParserDefinition implements ParserDefinition, PerlElementTypes,
 
   @Override
   public @NotNull Lexer createLexer(Project project) {
-    return new PerlMergingLexerAdapter(PerlLexingContext.create(project));
+    return new PerlSublexingLexerAdapter(PerlLexingContext.create(project));
   }
 
   @Override

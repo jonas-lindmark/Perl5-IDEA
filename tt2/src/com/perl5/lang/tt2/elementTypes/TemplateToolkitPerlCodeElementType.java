@@ -25,7 +25,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.ILazyParseableElementType;
 import com.perl5.lang.perl.PerlLanguage;
 import com.perl5.lang.perl.lexer.PerlLexingContext;
-import com.perl5.lang.perl.lexer.adapters.PerlMergingLexerAdapter;
+import com.perl5.lang.perl.lexer.adapters.PerlSublexingLexerAdapter;
 import com.perl5.lang.perl.parser.PerlParserImpl;
 import com.perl5.lang.perl.parser.elementTypes.PsiElementProvider;
 import com.perl5.lang.perl.psi.stubs.PerlStubElementTypes;
@@ -46,7 +46,7 @@ public class TemplateToolkitPerlCodeElementType extends ILazyParseableElementTyp
     PsiBuilder builder = PsiBuilderFactory.getInstance().createBuilder(
       project,
       chameleon,
-      new PerlMergingLexerAdapter(PerlLexingContext.create(project)),
+      new PerlSublexingLexerAdapter(PerlLexingContext.create(project)),
       PerlLanguage.INSTANCE,
       chameleon.getText()
     );

@@ -19,17 +19,13 @@ package com.perl5.lang.mojolicious.lexer;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.tree.TokenSet;
 import com.perl5.lang.mojolicious.MojoliciousElementTypes;
-import com.perl5.lang.perl.lexer.adapters.PerlMergingLexerAdapter;
 import com.perl5.lang.perl.lexer.adapters.PerlTemplatingMergingLexerAdapter;
 
 /**
  * Copy-pasted FlexAdapter because of private variables and no setters
  */
 public class MojoliciousLexerAdapter extends PerlTemplatingMergingLexerAdapter implements MojoliciousElementTypes {
-  private static final TokenSet TOKENS_TO_MERGE = TokenSet.orSet(
-    PerlMergingLexerAdapter.TOKENS_TO_MERGE,
-    TokenSet.create(MOJO_TEMPLATE_BLOCK_HTML)
-  );
+  private static final TokenSet TOKENS_TO_MERGE = TokenSet.create(MOJO_TEMPLATE_BLOCK_HTML);
 
   public MojoliciousLexerAdapter(Project project, boolean enforceSublexing) {
     super(project, new MojoliciousLexer(null).withProject(project), TOKENS_TO_MERGE, enforceSublexing);

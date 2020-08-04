@@ -31,7 +31,7 @@ import com.intellij.psi.tree.TokenSet;
 import com.perl5.lang.perl.extensions.parser.PerlParserExtension;
 import com.perl5.lang.perl.lexer.PerlElementTypes;
 import com.perl5.lang.perl.lexer.PerlLexingContext;
-import com.perl5.lang.perl.lexer.adapters.PerlMergingLexerAdapter;
+import com.perl5.lang.perl.lexer.adapters.PerlSublexingLexerAdapter;
 import com.perl5.lang.perl.parser.moose.MooseElementTypes;
 import gnu.trove.THashMap;
 import org.jetbrains.annotations.NotNull;
@@ -204,7 +204,7 @@ public class PerlSyntaxHighlighter extends SyntaxHighlighterBase implements Perl
 
   @Override
   public @NotNull Lexer getHighlightingLexer() {
-    return new PerlMergingLexerAdapter(PerlLexingContext.create(myProject).withEnforcedSublexing(true));
+    return new PerlSublexingLexerAdapter(PerlLexingContext.create(myProject).withEnforcedSublexing(true));
   }
 
   @Override
