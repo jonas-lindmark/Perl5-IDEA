@@ -241,8 +241,23 @@ POSIX_CHARGROUP_ANY = {POSIX_CHARGROUP}|{POSIX_CHARGROUP_DOUBLE}
 %xstate AFTER_FINALLY, AFTER_FINALLY_BLOCK
 
 %xstate FORCE_PACKAGE_TOKEN
+%xstate QUOTE_LIKE_ENTRANCE
 
 %%
+///////////////////////////// enterpoint for sublexing strings //////////////////////////////////////////
+<QUOTE_LIKE_ENTRANCE>{
+      {DQ_STRING} {pushStateAndBegin(AFTER_VALUE, QUOTE_LIKE_OPENER_QQ);return captureString();}
+      {XQ_STRING} {pushStateAndBegin(AFTER_VALUE, QUOTE_LIKE_OPENER_QX);return captureString();}
+      "<"         {pushStateAndBegin(AFTER_VALUE, QUOTE_LIKE_OPENER_GLOB);return captureString();}
+
+      {CORE_PREFIX}"qq" / {QUOTE_LIKE_SUFFIX} {pushStateAndBegin(AFTER_VALUE, QUOTE_LIKE_OPENER_QQ);return RESERVED_QQ;}
+      {CORE_PREFIX}"qx" / {QUOTE_LIKE_SUFFIX} {pushStateAndBegin(AFTER_VALUE, QUOTE_LIKE_OPENER_QX);return RESERVED_QX;}
+      {CORE_PREFIX}"qr" / {QUOTE_LIKE_SUFFIX} {regexCommand=RESERVED_QR; sectionsNumber=1; pushStateAndBegin(REGEX_OPENER); return regexCommand;}
+      {CORE_PREFIX}"m" / {QUOTE_LIKE_SUFFIX}  {regexCommand=RESERVED_M; sectionsNumber=1; pushStateAndBegin(REGEX_OPENER); return regexCommand;}
+      {CORE_PREFIX}"s" / {QUOTE_LIKE_SUFFIX}  {regexCommand=RESERVED_S; sectionsNumber=2; pushStateAndBegin(REGEX_OPENER); return regexCommand;}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 <LEX_SUB_NAME>{
 	{IDENTIFIER_CONTINUE} |
@@ -1089,7 +1104,7 @@ POSIX_CHARGROUP_ANY = {POSIX_CHARGROUP}|{POSIX_CHARGROUP_DOUBLE}
           "<" / "$"? {QUALIFIED_IDENTIFIER_WITHOUT_TRAILING_SEPARATOR}? ">"	{yybegin(HANDLE_WITH_ANGLE);return LEFT_ANGLE;}
           "<<" / ">>"                           {yybegin(DOUBLE_ANGLE_CLOSE);return LEFT_ANGLE;}
         }
-	"<"    {pushStateAndBegin(AFTER_VALUE, QUOTE_LIKE_OPENER_GLOB);return captureString();}
+	"<"    {pushStateAndBegin(AFTER_VALUE, QUOTE_LIKE_OPENER_GLOB);return captureString(STRING_DQ);}
 }
 
 <AFTER_VALUE,AFTER_VARIABLE,AFTER_IDENTIFIER>{
@@ -1308,9 +1323,9 @@ POSIX_CHARGROUP_ANY = {POSIX_CHARGROUP}|{POSIX_CHARGROUP_DOUBLE}
 	"<<~" / {QUOTED_HEREDOC_MARKER_NON_EMPTY} {yybegin(QUOTED_HEREDOC_OPENER_INDENTABLE);return OPERATOR_HEREDOC;}
 	"<<~" / "\\"?{UNQUOTED_HEREDOC_MARKER} 	  {yybegin(BARE_HEREDOC_OPENER_INDENTABLE);return OPERATOR_HEREDOC;}
 
-	{DQ_STRING} {pushStateAndBegin(AFTER_VALUE, QUOTE_LIKE_OPENER_QQ);return captureString();}
+	{DQ_STRING} {pushStateAndBegin(AFTER_VALUE, QUOTE_LIKE_OPENER_QQ);return captureString(STRING_DQ);}
 	{SQ_STRING} {pushStateAndBegin(AFTER_VALUE, QUOTE_LIKE_OPENER_Q);return captureString();}
-	{XQ_STRING} {pushStateAndBegin(AFTER_VALUE, QUOTE_LIKE_OPENER_QX);return captureString();}
+	{XQ_STRING} {pushStateAndBegin(AFTER_VALUE, QUOTE_LIKE_OPENER_QX);return captureString(STRING_XQ);}
 
 	// fixme optimize via merging?
 	{BAREWORD_MINUS} / {MAY_BE_SPACES_OR_COMMENTS}* {FARROW}	{yybegin(AFTER_VALUE);return STRING_CONTENT;}

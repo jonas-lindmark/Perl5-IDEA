@@ -62,6 +62,8 @@ public class PerlSublexingLexerAdapter extends LexerBase implements PerlElementT
     ENFORCED_SUBLEXINGS_MAP.put(HEREDOC, PerlLexer.STRING_Q);
     ENFORCED_SUBLEXINGS_MAP.put(HEREDOC_QQ, PerlLexer.STRING_QQ);
     ENFORCED_SUBLEXINGS_MAP.put(HEREDOC_QX, PerlLexer.STRING_QX);
+    ENFORCED_SUBLEXINGS_MAP.put(STRING_DQ, PerlLexer.QUOTE_LIKE_ENTRANCE);
+    ENFORCED_SUBLEXINGS_MAP.put(STRING_XQ, PerlLexer.QUOTE_LIKE_ENTRANCE);
   }
 
   private final @NotNull PerlProtoLexer myPerlLexer;

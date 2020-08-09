@@ -138,6 +138,9 @@ public class PerlParserDefinition implements ParserDefinition, PerlElementTypes,
     else if (elementType == PARSABLE_STRING_USE_VARS) {
       return USE_VARS_STRING;
     }
+    else if (elementType == STRING_DQ || elementType == STRING_XQ) {
+      return QUOTE_LIKE_ENTRANCE;
+    }
     return PerlLexer.YYINITIAL;
   }
 }

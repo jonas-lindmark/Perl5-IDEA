@@ -423,6 +423,7 @@
     LP_CODE_BLOCK_WITH_TRYCATCH = "LP_CODE_BLOCK_WITH_TRYCATCH"
     LP_STRING_RE = "LP_STRING_RE"
     LP_STRING_TR = "LP_STRING_TR"
+
     LP_STRING_QQ = "LP_STRING_QQ"
     LP_STRING_QQ_RESTRICTED = "LP_STRING_QQ_RESTRICTED"
     LP_STRING_Q = "LP_STRING_Q"
@@ -1256,7 +1257,10 @@ tag_scalar ::= TAG
 
 number_constant ::= NUMBER | NUMBER_VERSION | NUMBER_HEX | NUMBER_OCT | NUMBER_BIN
 
-private string ::= string_bare | string_sq | string_dq | string_xq | heredoc_opener
+private string ::= string_bare | string_sq | collapsed_string_dq | collapsed_string_xq |  string_dq | string_xq | heredoc_opener
+
+collapsed_string_dq ::= <<recollapseToken 'STRING_DQ'>> {elementType=string_dq extends=expr hooks=[collapse]}
+collapsed_string_xq ::= <<recollapseToken 'STRING_XQ'>> {elementType=string_xq extends=expr hooks=[collapse]}
 
 string_dq ::= [ 'qq'] quoted_qq_string
 private quoted_qq_string ::= QUOTE_DOUBLE_OPEN [qq_string_content_with_lp] QUOTE_DOUBLE_CLOSE {pin=1}

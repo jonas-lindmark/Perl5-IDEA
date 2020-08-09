@@ -16,6 +16,7 @@
 
 package com.perl5.lang.perl.parser;
 
+import com.intellij.lang.LighterASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
 import com.intellij.lang.WhitespacesAndCommentsBinder;
@@ -38,6 +39,16 @@ import static com.intellij.lang.WhitespacesBinders.GREEDY_RIGHT_BINDER;
 
 public class PerlParserUtil extends GeneratedParserUtilBase implements PerlElementTypes {
 
+  public static final Hook<Void> COLLAPSE = (builder, marker, param) -> {
+    if (marker == null) {
+      return null;
+    }
+    PsiBuilder.Marker res = marker.precede();
+    IElementType tokenType = ((LighterASTNode)marker).getTokenType();
+    marker.drop();
+    res.collapse(tokenType);
+    return res;
+  };
 
   public static final TokenSet VERSION_TOKENS = TokenSet.create(
     NUMBER,
@@ -465,5 +476,15 @@ public class PerlParserUtil extends GeneratedParserUtilBase implements PerlEleme
         return true;
       }
     }
+  }
+
+  public static boolean recollapseToken(@NotNull PsiBuilder b, int l, @NotNull IElementType tokenType) {
+    if (b.getTokenType() != tokenType) {
+      return false;
+    }
+    //PsiBuilder.Marker mark = b.mark();
+    b.advanceLexer();
+    //mark.collapse(tokenType);
+    return true;
   }
 }

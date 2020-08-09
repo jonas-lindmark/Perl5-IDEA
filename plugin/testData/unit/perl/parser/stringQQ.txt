@@ -1,0 +1,16 @@
+Subtree: Perl5 (Perl5)
+Perl5
+  PsiPerlStatementImpl(Perl5: STATEMENT)
+    PsiPerlStringDqImpl(Perl5: STRING_DQ)
+      PsiElement(Perl5: QUOTE_DOUBLE_OPEN)('"')
+      PerlStringContentElementImpl(Perl5: STRING_CONTENT_QQ)('string ')
+      PsiPerlScalarVariableImpl(Perl5: SCALAR_VARIABLE)
+        PsiElement(Perl5: $$)('$')
+        PerlVariableNameElementImpl(Perl5: SCALAR_NAME)('var')
+      PerlStringContentElementImpl(Perl5: STRING_CONTENT_QQ)(' string')
+      PsiElement(Perl5: QUOTE_DOUBLE_CLOSE)('"')
+--------------------------------------------------------------------------------
+Subtree: Perl5 POD (Perl5 POD)
+POD file
+  PsiElement(Perl5 POD: POD_OUTER)('"string $var string"')
+--------------------------------------------------------------------------------

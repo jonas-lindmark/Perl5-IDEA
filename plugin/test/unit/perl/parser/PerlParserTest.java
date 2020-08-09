@@ -33,6 +33,12 @@ public class PerlParserTest extends PerlParserTestBase {
   public void testArrayIndex() {doTest();}
 
   @Test
+  public void testStringQQ() {
+    myFixture.setCaresAboutInjection(false);
+    doTest();
+  }
+
+  @Test
   public void testStringQQCorruptingOutside() {doTest(false);}
 
   @Test

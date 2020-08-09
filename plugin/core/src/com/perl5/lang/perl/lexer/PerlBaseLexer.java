@@ -529,6 +529,10 @@ public abstract class PerlBaseLexer extends PerlProtoLexer implements PerlElemen
     throw new RuntimeException("Unknown lexical state for string token " + currentState);
   }
 
+  protected IElementType captureString() {
+    return captureString(null);
+  }
+
   /**
    * Finds opening quote, body and close quote of the quote-like structure. Pushes them as pre-parsed tokens.
    *
@@ -536,7 +540,7 @@ public abstract class PerlBaseLexer extends PerlProtoLexer implements PerlElemen
    * @see #captureRegex()
    * @see #captureTr()
    */
-  protected IElementType captureString() {
+  protected IElementType captureString(@Nullable IElementType collapseTo) {
     CharSequence buffer = getBuffer();
     int currentPosition = getTokenStart();
     int bufferEnd = getBufferEnd();
@@ -544,7 +548,10 @@ public abstract class PerlBaseLexer extends PerlProtoLexer implements PerlElemen
     char openQuote = buffer.charAt(currentPosition);
 
     List<IElementType> stringTokens = getStringTokens();
-    pushPreparsedToken(currentPosition++, currentPosition, stringTokens.get(0));
+    if (collapseTo == null) {
+      pushPreparsedToken(currentPosition, currentPosition + 1, stringTokens.get(0));
+    }
+    currentPosition++;
 
     int contentStart = currentPosition;
     boolean hasEscape = false;
@@ -591,14 +598,24 @@ public abstract class PerlBaseLexer extends PerlProtoLexer implements PerlElemen
         contentTokenType = stringTokens.get(3);
       }
 
-      pushPreparsedToken(contentStart, currentPosition, contentTokenType);
+      if (collapseTo == null) {
+        pushPreparsedToken(contentStart, currentPosition, contentTokenType);
+      }
     }
 
     if (currentPosition < bufferEnd) {
       // got close quote
-      pushPreparsedToken(currentPosition++, currentPosition, stringTokens.get(2));
+      if (collapseTo == null) {
+        pushPreparsedToken(currentPosition, currentPosition + 1, stringTokens.get(2));
+      }
+      currentPosition++;
     }
     popState();
+    if (collapseTo != null) {
+      setTokenEnd(currentPosition);
+      return collapseTo;
+    }
+
     return getPreParsedToken();
   }
 
