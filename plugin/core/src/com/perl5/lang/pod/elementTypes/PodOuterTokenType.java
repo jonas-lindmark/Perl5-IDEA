@@ -22,7 +22,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.tree.IReparseableLeafElementType;
 import com.intellij.psi.tree.OuterLanguageElementType;
-import com.perl5.lang.perl.PerlLanguage;
+import com.perl5.lang.pod.PodLanguage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,7 +30,7 @@ public class PodOuterTokenType extends OuterLanguageElementType implements IRepa
   private static final Logger LOG = Logger.getInstance(PodOuterTokenType.class);
 
   public PodOuterTokenType() {
-    super("POD_OUTER", PerlLanguage.INSTANCE);
+    super("POD_OUTER", PodLanguage.INSTANCE);
   }
 
   private boolean isReparseable(@NotNull ASTNode leaf, @NotNull CharSequence newText) {
@@ -63,5 +63,10 @@ public class PodOuterTokenType extends OuterLanguageElementType implements IRepa
   @Override
   public @Nullable ASTNode reparseLeaf(@NotNull ASTNode leaf, @NotNull CharSequence newText) {
     return isReparseable(leaf, newText) ? ASTFactory.leaf(this, newText) : null;
+  }
+
+  @Override
+  public String toString() {
+    return "Perl5 POD: " + super.toString();
   }
 }
