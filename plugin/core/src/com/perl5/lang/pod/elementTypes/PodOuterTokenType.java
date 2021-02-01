@@ -19,18 +19,12 @@ package com.perl5.lang.pod.elementTypes;
 import com.intellij.lang.ASTFactory;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.impl.source.tree.TreeUtil;
 import com.intellij.psi.tree.IReparseableLeafElementType;
 import com.intellij.psi.tree.OuterLanguageElementType;
 import com.perl5.lang.perl.PerlLanguage;
-import com.perl5.lang.perl.parser.elementTypes.PerlReparseableElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import static com.perl5.lang.perl.lexer.PerlElementTypesGenerated.POD;
 
 public class PodOuterTokenType extends OuterLanguageElementType implements IReparseableLeafElementType<ASTNode> {
   private static final Logger LOG = Logger.getInstance(PodOuterTokenType.class);
@@ -40,75 +34,30 @@ public class PodOuterTokenType extends OuterLanguageElementType implements IRepa
   }
 
   private boolean isReparseable(@NotNull ASTNode leaf, @NotNull CharSequence newText) {
-    var fileElement = TreeUtil.getFileElement((TreeElement)leaf);
-    if (fileElement == null) {
-      LOG.debug("Unable to find file element for ", leaf);
+    int newTextLength = newText.length();
+    if (newTextLength == 0) {
+      LOG.debug("New text is empty");
       return false;
     }
 
-    var prevLeaf = TreeUtil.prevLeaf(leaf);
-    var nextLeaf = TreeUtil.nextLeaf(leaf);
-    var currentLeafRange = leaf.getTextRange();
-
-    int startOffset = prevLeaf == null ? currentLeafRange.getStartOffset() : prevLeaf.getStartOffset();
-    int endOffset = nextLeaf == null ? currentLeafRange.getEndOffset() : nextLeaf.getTextRange().getEndOffset();
-
-    var originalChars = fileElement.getChars().subSequence(startOffset, endOffset);
-    int currentLeafRelativeStart = currentLeafRange.getStartOffset() - startOffset;
-    int currentLeafRelativeEnd = currentLeafRange.getEndOffset() - startOffset;
-    var newChars = StringUtil.replaceSubSequence(originalChars, currentLeafRelativeStart, currentLeafRelativeEnd, newText);
-    var newLeafRange = TextRange.from(currentLeafRelativeStart, newText.length());
-
-    var baseLexer = PerlReparseableElementType.createLexer(leaf);
-    baseLexer.start(newChars);
-
-    // first token
-    if (prevLeaf != null && (
-      baseLexer.getTokenType() != prevLeaf.getElementType() ||
-      baseLexer.getTokenEnd() != prevLeaf.getTextLength())) {
-      LOG.debug("First token mismatch: type or range. Original: ", prevLeaf,
-                "; new one: ", baseLexer.getTokenType(), " with length: ", baseLexer.getTokenEnd());
+    if (newTextLength > 1 && newText.charAt(0) == '=' && Character.isAlphabetic(newText.charAt(1))) {
+      LOG.debug("Starts with POD opener");
       return false;
     }
 
-    baseLexer.advance();
-
-    // mid tokens
+    int offset = 0;
     while (true) {
-      var tokenType = baseLexer.getTokenType();
-      if (tokenType == null || tokenType == POD) {
-        LOG.debug("Found POD element inside the modified fragment at ", baseLexer.getTokenStart() + startOffset);
-        return false;
-      }
-      if (baseLexer.getTokenEnd() == newLeafRange.getEndOffset()) {
-        break;
-      }
-      if (baseLexer.getTokenEnd() > newLeafRange.getEndOffset()) {
-        LOG.debug("Token overlapped new leaf at ", baseLexer.getTokenStart() + startOffset, "; type: ", baseLexer.getTokenType());
-        return false;
-      }
-      baseLexer.advance();
-    }
-
-    // last token
-    baseLexer.advance();
-    if (nextLeaf == null) {
-      if (baseLexer.getTokenType() == null) {
-        LOG.debug("MATCHED as the last element of the file");
+      offset = StringUtil.indexOf(newText, "\n=", offset);
+      if (offset < 0 || offset + 2 >= newTextLength) {
+        LOG.debug("No POD starters found");
         return true;
       }
-      LOG.debug("Has next token, when should not, at ", baseLexer.getTokenStart() + startOffset, "; type: ", baseLexer.getTokenType());
-      return false;
+      offset += 2;
+      if (Character.isAlphabetic(newText.charAt(offset))) {
+        LOG.debug("Found POD starter at ", offset);
+        return false;
+      }
     }
-
-    if (nextLeaf.getElementType() != baseLexer.getTokenType() ||
-        baseLexer.getTokenEnd() - baseLexer.getTokenStart() != nextLeaf.getTextLength()) {
-      LOG.debug("Next token mismatch, original: ", nextLeaf, " new one ", baseLexer.getTokenType(), " length ",
-                baseLexer.getTokenEnd() - baseLexer.getTokenStart());
-      return false;
-    }
-    LOG.debug("MATCHED as modified");
-    return true;
   }
 
   @Override
