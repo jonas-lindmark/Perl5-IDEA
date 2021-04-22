@@ -14,35 +14,18 @@
  * limitations under the License.
  */
 
-package editor;
+package com.perl5.lang.perl.parser.moose;
 
-import base.EmbeddedPerlLightTestCase;
-import org.junit.Test;
+import com.intellij.psi.tree.TokenSet;
 
-public class EmbeddedPerlFormatterTest extends EmbeddedPerlLightTestCase {
-  @Override
-  protected String getBaseDataPath() {
-    return "testData/formatter";
+import static com.perl5.lang.perl.parser.moose.MooseElementTypes.*;
+
+public final class MooseTokenSets {
+  public static final TokenSet MOOSE_STATEMENTS = TokenSet.create(
+    MOOSE_STATEMENT_WITH, MOOSE_STATEMENT_EXTENDS, MOOSE_STATEMENT_META, MOOSE_STATEMENT_AROUND, MOOSE_STATEMENT_AFTER,
+    MOOSE_STATEMENT_BEFORE, MOOSE_STATEMENT_AUGMENT, MOOSE_STATEMENT_OVERRIDE
+  );
+
+  private MooseTokenSets() {
   }
-
-  @Test
-  public void testSimple() {
-    doFormatTest();
-  }
-
-  @Test
-  public void testSimpleSameLineMarkers() {
-    doFormatTest();
-  }
-
-  @Test
-  public void testSimpleIndented() {
-    doFormatTest();
-  }
-
-  @Test
-  public void testDoubleNesting() { doFormatTest(); }
-
-  @Test
-  public void testTripleNesting() { doFormatTest(); }
 }
