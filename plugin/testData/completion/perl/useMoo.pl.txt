@@ -1,0 +1,18 @@
+Text: after; Tail: null; Type: Moo; Icon: /subroutine_gutter_icon.png; Type Icon: null
+	Lookups: after
+	PsiElement: Implicit sub: after()
+Text: around; Tail: null; Type: Moo; Icon: /subroutine_gutter_icon.png; Type Icon: null
+	Lookups: around
+	PsiElement: Implicit sub: around()
+Text: before; Tail: null; Type: Moo; Icon: /subroutine_gutter_icon.png; Type Icon: null
+	Lookups: before
+	PsiElement: Implicit sub: before()
+Text: extends; Tail: null; Type: Moo; Icon: /subroutine_gutter_icon.png; Type Icon: null
+	Lookups: extends
+	PsiElement: Implicit sub: extends()
+Text: has; Tail: null; Type: Moo; Icon: /subroutine_gutter_icon.png; Type Icon: null
+	Lookups: has
+	PsiElement: Implicit sub: has()
+Text: with; Tail: null; Type: Moo; Icon: /subroutine_gutter_icon.png; Type Icon: null
+	Lookups: with
+	PsiElement: Implicit sub: with()

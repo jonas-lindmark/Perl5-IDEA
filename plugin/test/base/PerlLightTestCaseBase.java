@@ -201,6 +201,7 @@ import junit.framework.AssertionFailedError;
 import kotlin.collections.CollectionsKt;
 import org.intellij.lang.annotations.MagicConstant;
 import org.intellij.plugins.intelliLang.inject.InjectLanguageAction;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
@@ -257,6 +258,7 @@ public abstract class PerlLightTestCaseBase extends BasePlatformTestCase {
   /**
    * @return test data path relative to the module root
    */
+  @NonNls
   protected String getBaseDataPath(){
     return "";
   }
@@ -2576,6 +2578,10 @@ public abstract class PerlLightTestCaseBase extends BasePlatformTestCase {
   protected void withLog4perl() { addTestLibrary("log4perl"); }
 
   protected void withMoose() { addTestLibrary("moose"); }
+
+  protected void withRoleTiny() { addTestLibrary("roleTiny"); }
+
+  protected void withMoo() { addTestLibrary("moo"); }
 
   protected void withFileSpec() { addTestLibrary("fileSpec"); }
 

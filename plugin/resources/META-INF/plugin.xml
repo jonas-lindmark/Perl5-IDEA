@@ -91,27 +91,33 @@
     <packageProcessor key="Mojolicious::Lite"
                       implementationClass="com.perl5.lang.perl.extensions.mojo.MojoliciousLitePackageProcessor"/>
     <packageProcessor key="Moose"
-                      implementationClass="com.perl5.lang.perl.extensions.packageprocessor.impl.MooseProcessor"/>
+                      implementationClass="com.perl5.lang.perl.extensions.moose.MooseProcessor"/>
     <packageProcessor key="Moose::Role"
-                      implementationClass="com.perl5.lang.perl.extensions.packageprocessor.impl.MooseRoleProcessor"/>
+                      implementationClass="com.perl5.lang.perl.extensions.moose.MooseRoleProcessor"/>
     <packageProcessor key="Moose::Util::TypeConstraints"
-                      implementationClass="com.perl5.lang.perl.extensions.packageprocessor.impl.MooseUtilTypeConstraintsProcessor"/>
+                      implementationClass="com.perl5.lang.perl.extensions.moose.MooseUtilTypeConstraintsProcessor"/>
     <packageProcessor key="MooseX::Types::CheckedUtilExports"
-                      implementationClass="com.perl5.lang.perl.extensions.packageprocessor.impl.MooseXTypesCheckedUtilExportsProcessor"/>
+                      implementationClass="com.perl5.lang.perl.extensions.moose.MooseXTypesCheckedUtilExportsProcessor"/>
     <packageProcessor key="MooseX::ClassAttribute"
-                      implementationClass="com.perl5.lang.perl.extensions.packageprocessor.impl.MooseXClassAttributeProcessor"/>
+                      implementationClass="com.perl5.lang.perl.extensions.moose.MooseXClassAttributeProcessor"/>
     <packageProcessor key="MooseX::Role::Parameterized"
-                      implementationClass="com.perl5.lang.perl.extensions.packageprocessor.impl.MooseXRoleParametrized"/>
+                      implementationClass="com.perl5.lang.perl.extensions.moose.MooseXRoleParametrized"/>
     <packageProcessor key="MooseX::MethodAttributes::Role"
-                      implementationClass="com.perl5.lang.perl.extensions.packageprocessor.impl.MooseRoleDelegatedProcessor"/>
+                      implementationClass="com.perl5.lang.perl.extensions.moose.MooseXMethodAttributesRoleProcessor"/>
     <packageProcessor key="MooseX::Role::WithOverloading"
-                      implementationClass="com.perl5.lang.perl.extensions.packageprocessor.impl.MooseRoleDelegatedProcessor"/>
+                      implementationClass="com.perl5.lang.perl.extensions.moose.MooseXRoleWithOverloadingProcessor"/>
     <packageProcessor key="MooseX::MethodAttributes"
-                      implementationClass="com.perl5.lang.perl.extensions.packageprocessor.impl.MooseDelegatedProcessor"/>
+                      implementationClass="com.perl5.lang.perl.extensions.moose.MooseXMethodAttributesProcessor"/>
 
 
     <packageProcessor key="Moo"
-                      implementationClass="com.perl5.lang.perl.extensions.packageprocessor.impl.MooProcessor"/>
+                      implementationClass="com.perl5.lang.perl.extensions.moo.MooProcessor"/>
+    <packageProcessor key="Moo::Role"
+                      implementationClass="com.perl5.lang.perl.extensions.moo.MooRoleProcessor"/>
+
+    <packageProcessor key="Role::Tiny"
+                      implementationClass="com.perl5.lang.perl.extensions.packageprocessor.impl.RoleTinyProcessor"/>
+
     <packageProcessor key="Dancer"
                       implementationClass="com.perl5.lang.perl.extensions.packageprocessor.impl.DancerPackageProcessor"/>
     <packageProcessor key="Dancer2"
@@ -169,6 +175,7 @@
     <implicitSubsProvider implementation="com.perl5.lang.perl.extensions.typesStandard.TypesStandardImplicitDeclarationsProvider"/>
     <implicitSubsProvider implementation="com.perl5.lang.perl.extensions.readonly.ReadonlyImplicitDeclarationsProvider"/>
     <implicitSubsProvider implementation="com.perl5.lang.perl.extensions.log4perl.Log4PerlImplicitDeclarationsProvider"/>
+    <implicitSubsProvider implementation="com.perl5.lang.perl.extensions.moo.MooImplicitSubsProvider"/>
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij">
