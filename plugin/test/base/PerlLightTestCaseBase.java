@@ -897,7 +897,10 @@ public abstract class PerlLightTestCaseBase extends BasePlatformTestCase {
       .append('\n');
 
     //noinspection ConstantConditions
-    resolveResults.sort(Comparator.comparing(it -> Objects.requireNonNull(PsiUtilCore.getVirtualFile(it.getElement())).getPath()));
+    resolveResults.sort(Comparator.comparing(it -> {
+      var virtualFile = PsiUtilCore.getVirtualFile(it.getElement());
+      return virtualFile == null ? "" : virtualFile.getPath();
+    }));
 
     for (ResolveResult result : resolveResults) {
       if (!result.isValidResult()) {
@@ -2578,6 +2581,11 @@ public abstract class PerlLightTestCaseBase extends BasePlatformTestCase {
   protected void withLog4perl() { addTestLibrary("log4perl"); }
 
   protected void withMoose() { addTestLibrary("moose"); }
+
+  protected void withMooseX() {
+    withMoose();
+    addTestLibrary("mooseX");
+  }
 
   protected void withRoleTiny() { addTestLibrary("roleTiny"); }
 

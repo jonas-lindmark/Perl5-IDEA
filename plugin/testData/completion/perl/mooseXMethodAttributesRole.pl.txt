@@ -475,6 +475,9 @@ Text: LibraryException; Tail: null; Type: null; Icon: /exceptionClass.svg; Type 
 Text: MATCH; Tail: null; Type: Built-in; Icon: /scalar_gutter_icon.png; Type Icon: null
 	Lookups: $MATCH, MATCH
 	PsiElement: Built-in: $MATCH
+Text: MODIFY_CODE_ATTRIBUTES; Tail: null; Type: MooseX::MethodAttributes::Role::AttrContainer; Icon: /subroutine_gutter_icon.png; Type Icon: null
+	Lookups: MODIFY_CODE_ATTRIBUTES
+	Export: &MODIFY_CODE_ATTRIBUTES => &MooseX::MethodAttributes::Role::AttrContainer::MODIFY_CODE_ATTRIBUTES
 Text: Mojolicious::Controller; Tail: null; Type: null; Icon: /package_gutter_icon.png; Type Icon: null
 	Lookups: Mojolicious::Controller
 	PsiElement: PsiPerlNamespaceDefinitionImpl(NAMESPACE)@Mojolicious::Controller at 0 in Controller.pm
@@ -1051,9 +1054,6 @@ Text: map; Tail: null; Type: CORE; Icon: /subroutine_gutter_icon.png; Type Icon:
 Text: meta; Tail: null; Type: Class::MOP::Mixin; Icon: /subroutine_gutter_icon.png; Type Icon: null
 	Lookups: meta
 	Export: &meta => &Class::MOP::Mixin::meta
-Text: meta; Tail: null; Type: Moose::Role; Icon: /subroutine_gutter_icon.png; Type Icon: null
-	Lookups: meta
-	Export: &meta => &Moose::Role::meta
 Text: mkdir; Tail: null; Type: CORE; Icon: /subroutine_gutter_icon.png; Type Icon: null
 	Lookups: mkdir
 	PsiElement: Implicit sub: mkdir()
